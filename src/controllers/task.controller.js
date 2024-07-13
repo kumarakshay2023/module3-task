@@ -11,7 +11,7 @@ exports.addTask = asyncHandler(async (req, res) => {
     description: description,
     completed: completed,
   });
-  return res.status(200).json({
+  return res.status(201).json({
     mes: "Task created successfully",
     data: tasks,
     success: true,
@@ -23,7 +23,7 @@ exports.getTaskById = asyncHandler(async (req, res) => {
   const filteredTask = tasks.filter((i) => {
     return i.id == id;
   });
-  if (filteredTask.length === 0) throw new ApiError("Task not found", 400);
+  if (filteredTask.length === 0) throw new ApiError("Task not found", 404);
   return res.status(200).json({
     data: filteredTask,
     success: true,
@@ -43,7 +43,7 @@ exports.updateTask = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { title, description, completed } = req.body;
   const taskToupdate = tasks.find(task=>task.id == id);
-  if(!taskToupdate) throw new ApiError("Task not found",400)
+  if(!taskToupdate) throw new ApiError("Task not found",404)
    taskToupdate.title = title;
    taskToupdate.description = description;
    taskToupdate.completed = completed;
@@ -58,7 +58,7 @@ exports.updateTask = asyncHandler(async (req, res) => {
 exports.deleteTask = asyncHandler(async (req, res) => {
     const {id} = req.params
     const taskToupdate = tasks.find(task=>task.id == id);
-    if(!taskToupdate) throw new ApiError("Task not found",400);
+    if(!taskToupdate) throw new ApiError("Task not found",404);
     tasks =  tasks.filter(task=>task.id != id);
     return res.status(200).json({
         msg:"Task removed successfully",
